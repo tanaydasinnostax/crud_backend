@@ -8,6 +8,10 @@ namespace crud.Models
         public decimal Value { get; set; }
         [Required]
         public string? Description { get; set; }
+        [Required]
+        public string? Gender { get; set; }
+        [Required]
+        public string? City { get; set; }
 
     }
 }

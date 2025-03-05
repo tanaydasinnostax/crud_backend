@@ -17,7 +17,9 @@ namespace crud.Controllers
 
         // Get all expenses
         [HttpGet]
-        public ActionResult<IEnumerable<Expense>> GetAll([FromQuery] int pageNumber = 1, [FromQuery] int pageSize=2)
+        public ActionResult<IEnumerable<Expense>> GetAll(
+            [FromQuery] int pageNumber = 1, 
+            [FromQuery] int pageSize=2)
         {
             var expenses = _expenseService.GetAllExpenses(pageNumber,pageSize);
             var totalCount = _expenseService.GetTotal();
@@ -30,6 +32,17 @@ namespace crud.Controllers
                 Expenses=expenses
             });
 
+        }
+        [HttpGet("filter")]
+        public async Task<IActionResult> GetFilteredProducts(
+            [FromQuery] string? Gender = null,
+            [FromQuery] string? City = null,
+            [FromQuery] string? Description = null,
+            [FromQuery] decimal? minValue = null,
+            [FromQuery] decimal? maxValue = null)
+        {
+            var expenses = await _expenseService.GetFilteredExpensesAsync(Gender, City, Description, minValue, maxValue);
+            return Ok(expenses);
         }
 
         // Get an expense by ID

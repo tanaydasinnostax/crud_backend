@@ -2546,11 +2546,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\innos\\source\\repos\\crud\\crud\\crud.csproj",
+      "projectUniqueName": "C:\\Users\\innos\\crud_backend\\crud\\crud.csproj",
       "projectName": "crud",
-      "projectPath": "C:\\Users\\innos\\source\\repos\\crud\\crud\\crud.csproj",
+      "projectPath": "C:\\Users\\innos\\crud_backend\\crud\\crud.csproj",
       "packagesPath": "C:\\Users\\innos\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\innos\\source\\repos\\crud\\crud\\obj\\",
+      "outputPath": "C:\\Users\\innos\\crud_backend\\crud\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"

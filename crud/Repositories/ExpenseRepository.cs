@@ -1,4 +1,5 @@
 ﻿using crud.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace crud.Repositories
 {
@@ -9,13 +10,41 @@ namespace crud.Repositories
         {
             _context = context ?? throw new ArgumentNullException(nameof(context));
         }
-        public IEnumerable<Expense> GetAllExpenses(int pageNumber,int pageSize)
+        public IEnumerable<Expense> GetAllExpenses(int pageNumber, int pageSize)
         {
+
             return _context.Expenses
                 .OrderBy(e=>e.Id)
                 .Skip((pageNumber-1)*pageSize)
                 .Take(pageSize)
                 .ToList();
+        }
+        public async Task<IEnumerable<Expense>> GetFilteredExpensesAsync(string? Gender,string? City,string? Description,decimal? minValue,decimal? maxValue)
+        {
+            var query = _context.Expenses.AsQueryable();
+            if (!string.IsNullOrEmpty(Gender))
+            {
+                query = query.Where(p => p.Gender == Gender);
+            }
+            if (!string.IsNullOrEmpty(City))
+            {
+                query = query.Where(p => p.City == City);
+            }
+            if (!string.IsNullOrEmpty(Description))
+            {
+                query = query.Where(p => p.Description == Description);
+            }
+            if (minValue.HasValue)
+            {
+                query = query.Where(e => e.Value >= minValue.Value);
+            }
+
+            if (maxValue.HasValue)
+            {
+                query = query.Where(e => e.Value <= maxValue.Value);
+            }
+            return await query.ToListAsync();
+
         }
         public Expense? GetExpenseById(int id)
         {
@@ -34,6 +63,8 @@ namespace crud.Repositories
             {
                 existingExpense.Value = expense.Value;
                 existingExpense.Description = expense.Description;
+                existingExpense.City = expense.City;
+                existingExpense.Gender = expense.Gender;
             }
             return existingExpense;
         }

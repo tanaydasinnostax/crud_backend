@@ -15,13 +15,12 @@ namespace crud.Services
         {
             return _expenseRepository.GetAllExpenses(pageNumber,pageSize);
         }
+        public async Task<IEnumerable<Expense>> GetFilteredExpensesAsync(string? Gender,string? City,string? Description,decimal? minValue,decimal? maxValue)
+        {
+            return await _expenseRepository.GetFilteredExpensesAsync(Gender, City, Description, minValue, maxValue);
+        }
         public Expense? GetExpenseById(int id)
         {
-
-
-
-
-
             return _expenseRepository.GetExpenseById(id);
         }
         public void CreateExpense(Expense expense)

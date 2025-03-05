@@ -92,6 +92,57 @@
         }
       }
     },
+    "/api/Expense/filter": {
+      "get": {
+        "tags": [
+          "Expense"
+        ],
+        "parameters": [
+          {
+            "name": "Gender",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "City",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "Description",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "minValue",
+            "in": "query",
+            "schema": {
+              "type": "number",
+              "format": "double"
+            }
+          },
+          {
+            "name": "maxValue",
+            "in": "query",
+            "schema": {
+              "type": "number",
+              "format": "double"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
     "/api/Expense/{id}": {
       "get": {
         "tags": [
@@ -237,7 +288,9 @@
     "schemas": {
       "Expense": {
         "required": [
-          "description"
+          "city",
+          "description",
+          "gender"
         ],
         "type": "object",
         "properties": {
@@ -250,6 +303,14 @@
             "format": "double"
           },
           "description": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "gender": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "city": {
             "minLength": 1,
             "type": "string"
           }

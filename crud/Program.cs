@@ -12,7 +12,7 @@ namespace crud
         {
             var builder = WebApplication.CreateBuilder(args);
             builder.Services.AddDbContext<SpendSmartDbContext>(options =>
-    options.UseMySql("Server=127.0.0.1;Port=3306;Database=SpendSmartDB;User=root;Password=Maa@1971;",
+    options.UseMySql("Server=127.0.0.1;Port=3306;Database=SpendSmartDB1;User=root;Password=Maa@1971;",
     new MySqlServerVersion(new Version(8, 0, 0)))
 );
 
