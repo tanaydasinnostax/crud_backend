@@ -1,11 +1,13 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using crud.Models;
 using crud.Services;
+using Microsoft.AspNetCore.Authorization;
 
 namespace crud.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class ExpenseController : ControllerBase
     {
         private readonly IExpenseService _expenseService;

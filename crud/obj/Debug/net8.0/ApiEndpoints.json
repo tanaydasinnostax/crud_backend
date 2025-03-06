@@ -146,6 +146,38 @@
     "ReturnTypes": []
   },
   {
+    "ContainingType": "crud.Controllers.UserService",
+    "Method": "Login",
+    "RelativePath": "api/UserService/login",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "request",
+        "Type": "crud.Controllers.UserService\u002BLoginRequest",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "crud.Controllers.UserService",
+    "Method": "Register",
+    "RelativePath": "api/UserService/register",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "request",
+        "Type": "crud.Controllers.UserService\u002BRegisterRequest",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
     "ContainingType": "crud.Controllers.WeatherForecastController",
     "Method": "Get",
     "RelativePath": "WeatherForecast",
