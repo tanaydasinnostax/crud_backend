@@ -30,7 +30,7 @@ namespace crud.Services
             {
                 throw new UnauthorizedAccessException("Invalid credentials");
             }
-            return GenerateToken(username);
+            return GenerateToken(user);
         }
         public async Task<string> SignUpAsync(string username, string email, string password)
         {
@@ -48,22 +48,52 @@ namespace crud.Services
             await _authRepository.AddUserAsync(user);
             return "User Registerd Successfully";
         }
-        private string GenerateToken(string username)
+        //private string GenerateToken(string username)
+        //{
+        //    var claims = new[]
+        //    {
+        //        new Claim(ClaimTypes.Name,username)
+        //    };
+        //    var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Jwt:key"]));
+        //    var credentials = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
+        //    var token = new JwtSecurityToken(
+        //        issuer: _configuration["Jwt:Issuer"],
+        //        audience: _configuration["Jwt:Audience"],
+        //        claims: claims,
+        //        expires: DateTime.UtcNow.AddHours(10),
+        //        signingCredentials: credentials
+        //    );
+        //    var tokenString = new JwtSecurityTokenHandler().CreateEncodedJwt(token);
+        //    Console.WriteLine("Generated Token: " + tokenString); // Print token
+        //    return tokenString;
+        //    //return new JwtSecurityTokenHandler().WriteToken(token);
+        //}
+        private string GenerateToken(Auth user)
         {
             var claims = new[]
             {
-                new Claim(ClaimTypes.Name,username)
+                new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
+                new Claim(ClaimTypes.Name, user.Username)
             };
-            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Jwt:Key"]));
+
+            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Jwt:key"]));
             var credentials = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
-            var token = new JwtSecurityToken(
-                issuer: _configuration["Jwt:Issuer"],
-                audience: _configuration["Jwt:Audience"],
-                claims: claims,
-                expires: DateTime.UtcNow.AddHours(1),
-                signingCredentials: credentials
-            );
-            return new JwtSecurityTokenHandler().WriteToken(token);
+
+            // Using CreateEncodedJwt properly requires different parameters
+            var tokenDescriptor = new SecurityTokenDescriptor
+            {
+                Subject = new ClaimsIdentity(claims),
+                Expires = DateTime.UtcNow.AddHours(10),
+                Issuer = _configuration["Jwt:Issuer"],
+                Audience = _configuration["Jwt:Audience"],
+                SigningCredentials = credentials
+            };
+
+            var tokenHandler = new JwtSecurityTokenHandler();
+            var tokenString = tokenHandler.CreateEncodedJwt(tokenDescriptor);
+
+            Console.WriteLine("Generated Token: " + tokenString); // Print token
+            return tokenString;
         }
     }
 }

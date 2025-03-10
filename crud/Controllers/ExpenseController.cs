@@ -2,6 +2,7 @@
 using crud.Models;
 using crud.Services;
 using Microsoft.AspNetCore.Authorization;
+using System.Security.Claims;
 
 namespace crud.Controllers
 {
@@ -23,8 +24,9 @@ namespace crud.Controllers
             [FromQuery] int pageNumber = 1, 
             [FromQuery] int pageSize=2)
         {
-            var expenses = _expenseService.GetAllExpenses(pageNumber,pageSize);
-            var totalCount = _expenseService.GetTotal();
+            var userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
+            var expenses = _expenseService.GetAllExpenses(userId,pageNumber,pageSize);
+            var totalCount = _expenseService.GetTotal(userId);
 
             return Ok(new
             {
@@ -37,13 +39,12 @@ namespace crud.Controllers
         }
         [HttpGet("filter")]
         public async Task<IActionResult> GetFilteredProducts(
-            [FromQuery] string? Gender = null,
-            [FromQuery] string? City = null,
             [FromQuery] string? Description = null,
             [FromQuery] decimal? minValue = null,
             [FromQuery] decimal? maxValue = null)
         {
-            var expenses = await _expenseService.GetFilteredExpensesAsync(Gender, City, Description, minValue, maxValue);
+            var userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
+            var expenses = await _expenseService.GetFilteredExpensesAsync(userId, Description, minValue, maxValue);
             return Ok(expenses);
         }
 
@@ -67,6 +68,9 @@ namespace crud.Controllers
             {
                 return BadRequest(new { message = "Invalid data" });
             }
+
+            var userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
+            expense.UserId = userId;
             _expenseService.CreateExpense(expense);
             return CreatedAtAction(nameof(GetById), new { id = expense.Id }, expense);
         }

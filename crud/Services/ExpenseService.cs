@@ -11,13 +11,13 @@ namespace crud.Services
         {
             _expenseRepository = expenseRepository;
         }
-        public IEnumerable<Expense> GetAllExpenses(int pageNumber,int pageSize)
+        public IEnumerable<Expense> GetAllExpenses(int userId, int pageNumber,int pageSize)
         {
-            return _expenseRepository.GetAllExpenses(pageNumber,pageSize);
+            return _expenseRepository.GetAllExpenses(userId,pageNumber,pageSize);
         }
-        public async Task<IEnumerable<Expense>> GetFilteredExpensesAsync(string? Gender,string? City,string? Description,decimal? minValue,decimal? maxValue)
+        public async Task<IEnumerable<Expense>> GetFilteredExpensesAsync(int userId, string? Description,decimal? minValue,decimal? maxValue)
         {
-            return await _expenseRepository.GetFilteredExpensesAsync(Gender, City, Description, minValue, maxValue);
+            return await _expenseRepository.GetFilteredExpensesAsync(userId, Description, minValue, maxValue);
         }
         public Expense? GetExpenseById(int id)
         {
@@ -44,13 +44,13 @@ namespace crud.Services
             _expenseRepository.DeleteExpense(id);
             _expenseRepository.Save();
         }
-        public decimal GetTotalExpenses()
+        public decimal GetTotalExpenses(int userId)
         {
-            return _expenseRepository.GetAllExpenses(1,int.MaxValue).Sum(x => x.Value);
+            return _expenseRepository.GetAllExpenses(userId,1,int.MaxValue).Sum(x => x.Value);
         }
-        public int GetTotal()
+        public int GetTotal(int userId)
         {
-            return _expenseRepository.GetTotal();
+            return _expenseRepository.GetTotal(userId);
         }
     }
 }

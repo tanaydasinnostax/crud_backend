@@ -10,26 +10,19 @@ namespace crud.Repositories
         {
             _context = context ?? throw new ArgumentNullException(nameof(context));
         }
-        public IEnumerable<Expense> GetAllExpenses(int pageNumber, int pageSize)
+        public IEnumerable<Expense> GetAllExpenses(int userId, int pageNumber, int pageSize)
         {
 
             return _context.Expenses
+                .Where(e=> e.UserId == userId)
                 .OrderBy(e=>e.Id)
                 .Skip((pageNumber-1)*pageSize)
                 .Take(pageSize)
                 .ToList();
         }
-        public async Task<IEnumerable<Expense>> GetFilteredExpensesAsync(string? Gender,string? City,string? Description,decimal? minValue,decimal? maxValue)
+        public async Task<IEnumerable<Expense>> GetFilteredExpensesAsync(int userId,string? Description,decimal? minValue,decimal? maxValue)
         {
-            var query = _context.Expenses.AsQueryable();
-            if (!string.IsNullOrEmpty(Gender))
-            {
-                query = query.Where(p => p.Gender == Gender);
-            }
-            if (!string.IsNullOrEmpty(City))
-            {
-                query = query.Where(p => p.City == City);
-            }
+            var query = _context.Expenses.Where(e=> e.UserId == userId);
             if (!string.IsNullOrEmpty(Description))
             {
                 query = query.Where(p => p.Description == Description);
@@ -63,8 +56,6 @@ namespace crud.Repositories
             {
                 existingExpense.Value = expense.Value;
                 existingExpense.Description = expense.Description;
-                existingExpense.City = expense.City;
-                existingExpense.Gender = expense.Gender;
             }
             return existingExpense;
         }
@@ -80,9 +71,9 @@ namespace crud.Repositories
         {
             _context.SaveChanges();
         }
-        public int GetTotal()
+        public int GetTotal(int userId)
         {
-            return _context.Expenses.Count();
+            return _context.Expenses.Count(e => e.UserId == userId);
         }
     }
 }

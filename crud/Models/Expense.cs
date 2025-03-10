@@ -9,9 +9,7 @@ namespace crud.Models
         [Required]
         public string? Description { get; set; }
         [Required]
-        public string? Gender { get; set; }
-        [Required]
-        public string? City { get; set; }
+        public int UserId { get; set; }
 
     }
 }
