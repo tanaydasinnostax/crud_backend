@@ -6,5 +6,8 @@ namespace crud.Repositories
     {
         Task<Auth> GetByUsernameAsync(string username);
         Task AddUserAsync(Auth auth);
+        Task<Auth?> GetByIdAsync(int userId);
+
+        Task UpdateProfilePictureAsync(int userId, byte[] profilePicture);
     }
 }

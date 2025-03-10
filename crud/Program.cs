@@ -14,6 +14,17 @@ namespace crud
         public static void Main(string[] args)
         {
             var builder = WebApplication.CreateBuilder(args);
+            builder.Services.AddCors(options =>
+            {
+                options.AddPolicy("AllowFrontend",
+                    policy =>
+                    {
+                        policy.WithOrigins("http://localhost:3000")  // Allow frontend URL
+                              .AllowAnyMethod()                      // Allow all HTTP methods
+                              .AllowAnyHeader()                      // Allow all headers
+                              .AllowCredentials();                   // Allow credentials (if needed)
+                    });
+            });
             // Add this temporary diagnostic code in Program.cs at the beginning
             Console.WriteLine("JWT Key: " + builder.Configuration["Jwt:key"]);
             Console.WriteLine("JWT Issuer: " + builder.Configuration["Jwt:Issuer"]);
@@ -128,8 +139,9 @@ namespace crud
             // ✅ Middleware Order (Important)
             app.UseHttpsRedirection();
             app.UseStaticFiles();
+            app.UseCors("AllowFrontend");
 
-            app.UseAuthentication();  // 🔹 Ensure Authentication is before Authorization
+            app.UseAuthentication();
             app.UseAuthorization();
 
             app.MapControllers();

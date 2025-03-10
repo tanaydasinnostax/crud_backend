@@ -17,6 +17,9 @@ namespace crud.Models
                 .HasPrecision(10, 2);
 
             base.OnModelCreating(modelBuilder);
+            modelBuilder.Entity<Auth>()
+                .Property(a => a.ProfilePicture)
+                .HasColumnType("LONGBLOB");
         }
     }
 

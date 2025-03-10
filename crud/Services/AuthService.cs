@@ -7,6 +7,7 @@ using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
+using Microsoft.EntityFrameworkCore;
 
 namespace crud.Services
 {
@@ -19,6 +20,11 @@ namespace crud.Services
             _authRepository = authRepository;
             _configuration = configuration;
         }
+        public async Task<Auth?> GetByIdAsync(int userId)
+        {
+            return await _authRepository.GetByIdAsync(userId);
+        }
+
         public async Task<string> LoginAsync(string username, string password)
         {
             var user = await _authRepository.GetByUsernameAsync(username);
@@ -47,6 +53,10 @@ namespace crud.Services
             };
             await _authRepository.AddUserAsync(user);
             return "User Registerd Successfully";
+        }
+        public async Task UpdateProfilePictureAsync(int userId, byte[] profilePicture)
+        {
+            await _authRepository.UpdateProfilePictureAsync(userId, profilePicture);
         }
         //private string GenerateToken(string username)
         //{

@@ -2,6 +2,7 @@
 using crud.Services;
 using Microsoft.AspNetCore.Identity.Data;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 
 namespace crud.Controllers
 {
@@ -40,6 +41,38 @@ namespace crud.Controllers
                 return BadRequest(ex.Message);
             }
         }
+
+        [HttpPost("upload-profile-picture")]
+        public async Task<IActionResult> UploadProfilePicture(IFormFile file)
+        {
+            if (file == null || file.Length == 0)
+                return BadRequest("No file uploaded");
+
+            var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            if (string.IsNullOrEmpty(userIdClaim) || !int.TryParse(userIdClaim, out int userId))
+                return Unauthorized("Invalid or missing user ID. Please log in again.");
+
+            using var memoryStream = new MemoryStream();
+            await file.CopyToAsync(memoryStream);
+            byte[] imageData = memoryStream.ToArray();
+
+            await _authService.UpdateProfilePictureAsync(userId, imageData);
+
+            return Ok(new { message = "Profile picture updated successfully" });
+        }
+
+        [HttpGet("profile-picture")]
+        public async Task<IActionResult> GetProfilePicture()
+        {
+            var userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
+            var user = await _authService.GetByIdAsync(userId);
+
+            if (user == null || user.ProfilePicture == null)
+                return NotFound("No profile picture found");
+
+            return File(user.ProfilePicture, "image/jpeg");
+        }
+
         public class LoginRequest
         {
             public string Username { get; set; }
