@@ -7,7 +7,7 @@ using System.Security.Claims;
 namespace crud.Controllers
 {
     [ApiController]
-    [Route("api/[controller]")]
+    [Route("api/v20/[controller]")]
     public class UserService : Controller
     {
         private readonly IAuthService _authService;

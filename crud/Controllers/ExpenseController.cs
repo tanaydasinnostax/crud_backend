@@ -6,7 +6,7 @@ using System.Security.Claims;
 
 namespace crud.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/v20/[controller]")]
     [ApiController]
     [Authorize]
     public class ExpenseController : ControllerBase
