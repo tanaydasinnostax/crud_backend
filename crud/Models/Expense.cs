@@ -10,6 +10,7 @@ namespace crud.Models
         public string? Description { get; set; }
         [Required]
         public int UserId { get; set; }
+        public DateTime ExpenseDate { get; set; } = DateTime.UtcNow;
 
     }
 }

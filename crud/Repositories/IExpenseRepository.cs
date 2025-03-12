@@ -4,7 +4,7 @@ namespace crud.Repositories
 {
     public interface IExpenseRepository
     {
-        IEnumerable<Expense> GetAllExpenses(int userId,int pageNumber,int pageSize);
+        IEnumerable<Expense> GetAllExpenses(int userId,int pageNumber,int pageSize,string sortOrder,DateTime? startDate,DateTime? endDate);
         Task<IEnumerable<Expense>> GetFilteredExpensesAsync(int userId, string? Description, decimal? minValue, decimal? maxValue);
         Expense? GetExpenseById(int id);
         void AddExpense(Expense expense);

@@ -22,10 +22,14 @@ namespace crud.Controllers
         [HttpGet]
         public ActionResult<IEnumerable<Expense>> GetAll(
             [FromQuery] int pageNumber = 1, 
-            [FromQuery] int pageSize=2)
+            [FromQuery] int pageSize=2,
+            [FromQuery] string sortOrder = "asc",
+            [FromQuery] DateTime? startDate = null,
+            [FromQuery] DateTime? endDate = null
+            )
         {
             var userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
-            var expenses = _expenseService.GetAllExpenses(userId,pageNumber,pageSize);
+            var expenses = _expenseService.GetAllExpenses(userId,pageNumber,pageSize,sortOrder,startDate,endDate);
             var totalCount = _expenseService.GetTotal(userId);
 
             return Ok(new

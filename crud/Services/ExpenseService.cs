@@ -11,9 +11,9 @@ namespace crud.Services
         {
             _expenseRepository = expenseRepository;
         }
-        public IEnumerable<Expense> GetAllExpenses(int userId, int pageNumber,int pageSize)
+        public IEnumerable<Expense> GetAllExpenses(int userId, int pageNumber, int pageSize, string sortOrder, DateTime? startDate, DateTime? endDate)
         {
-            return _expenseRepository.GetAllExpenses(userId,pageNumber,pageSize);
+            return _expenseRepository.GetAllExpenses(userId,pageNumber,pageSize,sortOrder,startDate,endDate);
         }
         public async Task<IEnumerable<Expense>> GetFilteredExpensesAsync(int userId, string? Description,decimal? minValue,decimal? maxValue)
         {
@@ -44,9 +44,9 @@ namespace crud.Services
             _expenseRepository.DeleteExpense(id);
             _expenseRepository.Save();
         }
-        public decimal GetTotalExpenses(int userId)
+        public decimal GetTotalExpenses(int userId,DateTime? startDate = null,DateTime? endDate = null)
         {
-            return _expenseRepository.GetAllExpenses(userId,1,int.MaxValue).Sum(x => x.Value);
+            return _expenseRepository.GetAllExpenses(userId,1,int.MaxValue,"asc",startDate,endDate).Sum(x => x.Value);
         }
         public int GetTotal(int userId)
         {

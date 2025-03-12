@@ -19,18 +19,17 @@ namespace crud
                 options.AddPolicy("AllowFrontend",
                     policy =>
                     {
-                        policy.WithOrigins("http://localhost:3000")  // Allow frontend URL
-                              .AllowAnyMethod()                      // Allow all HTTP methods
-                              .AllowAnyHeader()                      // Allow all headers
-                              .AllowCredentials();                   // Allow credentials (if needed)
+                        policy.WithOrigins("http://localhost:3000")
+                              .AllowAnyMethod()                      
+                              .AllowAnyHeader()                      
+                              .AllowCredentials();                   
                     });
             });
-            // Add this temporary diagnostic code in Program.cs at the beginning
-            Console.WriteLine("JWT Key: " + builder.Configuration["Jwt:key"]);
-            Console.WriteLine("JWT Issuer: " + builder.Configuration["Jwt:Issuer"]);
-            Console.WriteLine("JWT Audience: " + builder.Configuration["Jwt:Audience"]);
 
-            // ✅ Configure Database Connection
+            //Console.WriteLine("JWT Key: " + builder.Configuration["Jwt:key"]);
+            //Console.WriteLine("JWT Issuer: " + builder.Configuration["Jwt:Issuer"]);
+            //Console.WriteLine("JWT Audience: " + builder.Configuration["Jwt:Audience"]);
+
             builder.Services.AddDbContext<SpendSmartDbContext>(options =>
                 options.UseMySql(
                     builder.Configuration.GetConnectionString("DefaultConnection"),
@@ -38,13 +37,11 @@ namespace crud
                 )
             );
 
-            // ✅ Register Services and Repositories
             builder.Services.AddScoped<IExpenseRepository, ExpenseRepository>();
             builder.Services.AddScoped<IAuthRepository, AuthRepository>();
             builder.Services.AddScoped<IAuthService, AuthService>();
             builder.Services.AddScoped<IExpenseService, ExpenseService>();
 
-            // ✅ Configure JWT Authenticationvar
              var key = Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"]);
 
             builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
@@ -87,15 +84,10 @@ namespace crud
                         };
                     });
 
-                        // ✅ Add Controllers
             builder.Services.AddControllers();
-
-            // ✅ Configure Swagger with JWT Authentication
             builder.Services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "My API", Version = "v1" });
-
-                // 🔹 Add JWT Authentication support in Swagger
                 c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
                 {
                     Description = "Enter 'Bearer {your_token}' without quotes",
@@ -122,11 +114,7 @@ namespace crud
             });
 
             var app = builder.Build();
-            //var expTime = DateTimeOffset.FromUnixTimeSeconds(1741589444).UtcDateTime;
-            //Console.WriteLine("Token Expiry Time (UTC): " + expTime);
 
-
-            // ✅ Enable Swagger UI
             if (app.Environment.IsDevelopment())
             {
                 app.UseSwagger();

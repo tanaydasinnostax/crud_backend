@@ -10,12 +10,21 @@ namespace crud.Repositories
         {
             _context = context ?? throw new ArgumentNullException(nameof(context));
         }
-        public IEnumerable<Expense> GetAllExpenses(int userId, int pageNumber, int pageSize)
+        public IEnumerable<Expense> GetAllExpenses(int userId, int pageNumber, int pageSize, string sortOrder, DateTime? startDate, DateTime? endDate)
         {
+            var query = _context.Expenses.Where(e => e.UserId == userId);
+            if (startDate.HasValue)
+            {
+                query = query.Where(e => e.ExpenseDate >= startDate.Value);
+            }
+            if (endDate.HasValue)
+            {
+                query = query.Where(e => e.ExpenseDate <= endDate.Value);
+            }
 
-            return _context.Expenses
-                .Where(e=> e.UserId == userId)
-                .OrderBy(e=>e.Id)
+            query = sortOrder.ToLower() == "desc" ? query.OrderByDescending(e => e.Value) : query.OrderBy(e => e.Value);
+
+            return query
                 .Skip((pageNumber-1)*pageSize)
                 .Take(pageSize)
                 .ToList();
