@@ -19,7 +19,7 @@ namespace crud
                 options.AddPolicy("AllowFrontend",
                     policy =>
                     {
-                        policy.WithOrigins("http://localhost:3000")
+                        policy.WithOrigins("https://expensemanager-umber.vercel.app")
                               .AllowAnyMethod()                      
                               .AllowAnyHeader()                      
                               .AllowCredentials();                   

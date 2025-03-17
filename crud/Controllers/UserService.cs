@@ -7,7 +7,7 @@ using System.Security.Claims;
 namespace crud.Controllers
 {
     [ApiController]
-    [Route("api/v20/[controller]")]
+    [Route("api/v20/auth")]
     public class UserService : Controller
     {
         private readonly IAuthService _authService;
@@ -42,7 +42,7 @@ namespace crud.Controllers
             }
         }
 
-        [HttpPost("upload-profile-picture")]
+        [HttpPost("profile-picture")]
         public async Task<IActionResult> UploadProfilePicture(IFormFile file)
         {
             if (file == null || file.Length == 0)
